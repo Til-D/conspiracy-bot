@@ -1,0 +1,9 @@
+services:
+    app:
+        image: 'rasa/rasa-sdk:latest'
+        volumes:
+            - './actions:/app/actions'
+        expose:
+            - '5055'
+        depends_on:
+            - rasa-production
