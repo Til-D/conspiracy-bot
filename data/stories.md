@@ -3,6 +3,8 @@
   - utter_greet
 * mood_great
   - utter_happy
+* thanks
+  - utter_noworries
 
 ## sad path 1
 * greet
