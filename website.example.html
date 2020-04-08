@@ -1,23 +1,16 @@
-<html>
-	<header><title>Conspiracy Bot</title></header>
-	<body>
-
-			<h1>Conspiracy Bot</h1>
-
-			<div id="webchat"/>
-			<script src="https://storage.googleapis.com/mrbot-cdn/webchat-latest.js"></script>
-			// Or you can replace latest with a specific version
-			<script>
-			  WebChat.default.init({
-			    selector: "#webchat",
-			    initPayload: "/get_started",
-			    customData: {"language": "en"}, // arbitrary custom data. Stay minimal as this will be added to the socket
-			    socketUrl: "http://34.87.238.171/",
-			    socketPath: "/socket.io/",
-			    title: "Conspiracy Bot",
-			    subtitle: "All your base",
-			  })
-			</script>
-
-	</body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <script type="module" src="https://unpkg.com/@assister/rasa@latest/dist/rasa/rasa.esm.js"></script>
+    <link href="https://unpkg.com/@assister/rasa@latest/dist/rasa/rasa.css" rel="stylesheet">
+    <style>
+      :root {
+        /* --header-background-color: gray; */
+        /* --header-text-color: black; */
+      }
+    </style>
+  </head>
+  <body>
+    <rasa-bot server="http://34.87.238.171/" />
+  </body>
 </html>

@@ -23,6 +23,7 @@
 - correct
 - Cool
 - Now better
+- ready
 
 ## intent:deny
 - no
