@@ -23,7 +23,7 @@ responses:
   - text: "Hello, I am Infobot, your daily news assistant. I collect news from various sources and summarise them for you."
 
   utter_introduction:
-  - text: "These are the news items I have for you today. Click on the headline to read a quick summary of the article. "
+  - text: "I have various news items for you today. You can either click on the headlines or ask me for a quick summary of the article."
     buttons:
       - title: "Got it! Let's go!"
         # payload: "Let's go!"
