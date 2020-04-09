@@ -8,6 +8,7 @@ intents:
   - mood_great
   - article_summary
   - random_article
+  - show_articles
 
 actions:
   - action_random_article
@@ -35,6 +36,59 @@ responses:
 
   utter_want_summary:
   - text: "Would you like a summary?"
+
+  utter_article_selection:
+    - custom:
+        carousel:
+          maxWidth: 6    
+          maxHeight: 7   
+          elements:
+            - title: "Article 1"
+              # imageButton:
+              #   imageUrl: https://expertflow.com/any-image1.jpg
+              #   actionType: postback
+              #   actionBody: /example_intent
+              #   imageHeight: 3
+              # descriptionButton:
+              #   text: subtitle
+              #   actionType: web_url
+              #   actionBody: descriptionButton
+              #   textHeight: 2
+              # defaultAction:
+              #   type: web_url
+              #   url: https://expertflow.com/#video-message
+              # buttons:
+              #   - title: button 1
+              #     payload: /button1
+              #     type: postback
+              #     buttonHeight: 1
+              #   - title: ' button 2'
+              #     payload: /button2
+              #     type: postback
+              #     buttonHeight: 1
+            - title: "Article 2"
+              # imageButton:
+              #   imageUrl: https://expertflow.com/any-image2.jpg
+              #   actionType: web_url
+              #   actionBody: ImageButton
+              #   imageHeight: 3
+              # descriptionButton:
+              #   text: subtitle
+              #   actionType: web_url
+              #   actionBody: descriptionButton
+              #   textHeight: 2
+              # defaultAction:
+              #   type: web_url
+              #   url: https://expertflow.com/#video-message
+              # buttons:
+              #   - title: button 3
+              #     payload: /button3
+              #     type: postback
+              #     buttonHeight: 1
+              #   - title: ' button 4'
+              #     payload: /button4
+              #     type: postback
+              #     buttonHeight: 1
 
   # utter_cheer_up:
   # - text: "Here is something to cheer you up:"

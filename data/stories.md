@@ -30,3 +30,7 @@
   - action_get_summary
 * goodbye
   - utter_goodbye
+
+## select article path
+* show_articles
+ - utter_article_selection

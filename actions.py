@@ -77,8 +77,7 @@ class ActionGetSummary(Action):
 
         print(article['headline'])
 
-        mrkdown = "#Summary: {} \n {}".format(article['headline'], article['summary'])
-
-        dispatcher.utter_message(text=mrkdown, type= 'mrkdwn')
+        dispatcher.utter_message(text="{}".format(article['headline']), type= 'mrkdwn')
+        dispatcher.utter_message(text="{}".format(article['summary']), type= 'mrkdwn')
 
         return []

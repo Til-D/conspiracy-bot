@@ -78,3 +78,8 @@
 - I would like to read anything
 - how about a random news article?
 - another random article
+
+## intent:show_articles
+- show me all articles
+- which articles do you have?
+- can I see them all?
