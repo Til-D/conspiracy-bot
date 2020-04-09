@@ -6,9 +6,16 @@ intents:
   - bot_challenge
   - mood_unhappy
   - mood_great
+  - article_summary
+  - random_article
 
 actions:
   - action_random_article
+  - action_get_summary
+
+slots:
+  article_id:
+    type: text
 
 responses:
   utter_greet:
@@ -23,6 +30,11 @@ responses:
 
   utter_goodbye:
   - text: "Bye"
+  - text: "See you later!"
+  - text: "Thanks for stopping by!"
+
+  utter_want_summary:
+  - text: "Would you like a summary?"
 
   # utter_cheer_up:
   # - text: "Here is something to cheer you up:"

@@ -61,9 +61,20 @@
 - I'm ok.
 - I'm ok
 
+## intent:article_summary
+- Get summary!
+- Give me a summary.
+- I would appreciate a summary!
+
 ## intent:bot_challenge
 - are you a bot?
 - are you a human?
 - am I talking to a bot?
 - am I talking to a human?
 - What are you up to?
+
+## intent:random_article
+- give me a random article
+- I would like to read anything
+- how about a random news article?
+- another random article
