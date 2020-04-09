@@ -24,6 +24,7 @@
 - Cool
 - Now better
 - ready
+- Let's go!
 
 ## intent:deny
 - no

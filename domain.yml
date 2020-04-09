@@ -16,6 +16,10 @@ responses:
 
   utter_introduction:
   - text: "These are the news items I have for you today. Click on the headline to read a quick summary of the article. "
+    buttons:
+      - title: "Got it! Let's go!"
+        # payload: "Let's go!"
+        payload: "/affirm"
 
   utter_goodbye:
   - text: "Bye"
