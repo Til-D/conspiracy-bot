@@ -77,7 +77,10 @@ class ActionGetSummary(Action):
 
         print(article['headline'])
 
-        dispatcher.utter_message(text="{}".format(article['headline']), type= 'mrkdwn')
-        dispatcher.utter_message(text="{}".format(article['summary']), type= 'mrkdwn')
+        responseSelections = [
+            {"title": "Want more news?", "payload": '/random_article'}
+                 ]
+        # dispatcher.utter_message(text="{}".format(article['headline']), type= 'mrkdwn')
+        dispatcher.utter_message(text="{}".format(article['summary']), type= 'mrkdwn', buttons=responseSelections)
 
         return []
