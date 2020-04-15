@@ -15,8 +15,10 @@ actions:
   - action_get_summary
 
 slots:
-  article_id:
-    type: text
+  article_sequence:
+    type: list
+  article_index:
+    type: float
 
 responses:
   utter_greet:

@@ -32,22 +32,54 @@ class ActionRandomArticle(Action):
         # dataSheet = [row for row in csv.DictReader(open(filepath_server))]
 
         dataSheet = json.loads(ARTICLES)
-        randomArticle = random.choice(dataSheet)
+        print(dataSheet)
 
-        print('Retrieved article: %s' % randomArticle['headline'])
+        # check if article sequence is initialized otherwise randomize 
 
-        mrkdown = '[{}]({})'.format(randomArticle['headline'], randomArticle['link'])
+        sequence = tracker.get_slot('article_sequence')
+        index = tracker.get_slot('article_index')
+        
+        if(sequence is not None and index is not None):
+            print('+ Article sequence already initialized.')
+            # sequence = json.loads(sequence)
+            index += 1
+        else:
+            print('- Initializing article sequence')
+            sequence = [item['id'] for item in dataSheet]
+            random.shuffle(sequence)
+            index = 0
 
-        dispatcher.utter_message(text=mrkdown, image=randomArticle['image'], type= 'mrkdwn')
+        # print('article index: %d' % index)
+        # print('article sequence: %s' % json.dumps(sequence))
 
-        responseSelections = [
-            {"title": "Yes", "payload": '/article_summary'},
-            {"title": "No, thanks.", "payload": '/goodbye'},
-            {"title": "Show me another article.", "payload": '/random_article'},
-                 ]
-        dispatcher.utter_message(template="utter_want_summary", buttons=responseSelections)
+        if(sequence and index >= len(sequence)): # That's it, no more articles
+            sequence = None
+            index = None
+            dispatcher.utter_message(text="That's it. These are all the articles I've got.")
+        else:
+            nextArticleId = sequence[index]
+            randomArticle = [item for item in dataSheet if item['id']==nextArticleId][0]
 
-        return [SlotSet("article_id", randomArticle["id"])]
+            print('Retrieved article: (id: %s) %s' % (randomArticle['id'], randomArticle['headline']))
+            print('Index: %d' % index)
+            print('Article sequence: %s' % json.dumps(sequence))
+
+            # with links:
+            # mrkdown = '[{}]({})'.format(randomArticle['headline'], randomArticle['link'])
+
+            # without links:
+            mrkdown = '{}'.format(randomArticle['headline'])
+
+            dispatcher.utter_message(text=mrkdown, image=randomArticle['image'], type= 'mrkdwn')
+
+            responseSelections = [
+                {"title": "Yes", "payload": '/article_summary'},
+                {"title": "No, thanks.", "payload": '/goodbye'},
+                {"title": "Show me another article.", "payload": '/random_article'},
+                     ]
+            dispatcher.utter_message(template="utter_want_summary", buttons=responseSelections)
+
+        return [SlotSet("article_sequence", sequence), SlotSet("article_index", index)]
 
 
 class ActionGetSummary(Action):
@@ -65,22 +97,31 @@ class ActionGetSummary(Action):
         # dataSheet = [row for row in csv.DictReader(open(filepath_server))]
         dataSheet = json.loads(ARTICLES)
 
-        articleId = tracker.get_slot('article_id')
-        print('Retrieved article id: %s' % articleId)
-        article = {
-            'summary': 'article not found'
-        }
-        for item in dataSheet:
-            if(item['id']==articleId):
-                article = item
-                break
+        sequence = tracker.get_slot('article_sequence')
+        index = tracker.get_slot('article_index')
+        
+        if(sequence is not None and index is not None):
+            articleId = sequence[index]
+        
+            print('Retrieved article id: %s' % articleId)
+            article = {
+                'summary': 'article not found'
+            }
+            for item in dataSheet:
+                if(item['id']==articleId):
+                    article = item
+                    break
 
-        print(article['headline'])
+            print(article['headline'])
 
-        responseSelections = [
-            {"title": "Want more news?", "payload": '/random_article'}
-                 ]
-        # dispatcher.utter_message(text="{}".format(article['headline']), type= 'mrkdwn')
-        dispatcher.utter_message(text="{}".format(article['summary']), type= 'mrkdwn', buttons=responseSelections)
+            responseSelections = [
+                {"title": "Want more news?", "payload": '/random_article'}
+                     ]
+            # dispatcher.utter_message(text="{}".format(article['headline']), type= 'mrkdwn')
+            dispatcher.utter_message(text="{}".format(article['summary']), type= 'mrkdwn', buttons=responseSelections)
+
+        else:
+            dispatcher.utter_message(text="Mhm.... I don't have a summary for this article.")
+            dispatcher.utter_message(template="utter_introduction")
 
         return []
