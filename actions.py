@@ -118,7 +118,13 @@ class ActionGetSummary(Action):
 
         sequence = tracker.get_slot('article_sequence')
         index = tracker.get_slot('article_index')
+        articlesRead = tracker.get_slot('articles_read_count')
         uid = tracker.get_slot('uid')
+
+        if(articlesRead is None):
+            articlesRead = 1
+        else:
+            articlesRead += 1
         
         if(sequence is not None and index is not None):
             articleId = sequence[index]
@@ -134,20 +140,25 @@ class ActionGetSummary(Action):
 
             print(article['headline'])
 
-            if(index<MIN_ARTICLES_TO_READ):
-                title = 'We have more articles for you! Click here!'
+            if(articlesRead >= MIN_ARTICLES_TO_READ):
+                # index<MIN_ARTICLES_TO_READ):
+                
+                dispatcher.utter_message(text="{}".format(article['summary']), type= 'mrkdwn')
+                dispatcher.utter_message(text="Excellent. When you are done reading click [https://www.qualtrics.com/]{here} to get back to the rest of the survey.", type= 'mrkdwn')
             else:
-                title = 'Want more news?'
-
-            responseSelections = [
-                {"title": title, "payload": '/random_article'}
+                responseSelections = [
+                {"title": 'Want more news?', "payload": '/random_article'}
                      ]
+                dispatcher.utter_message(text="{}".format(article['summary']), type= 'mrkdwn', buttons=responseSelections)
+
+
+            
             # dispatcher.utter_message(text="{}".format(article['headline']), type= 'mrkdwn')
-            dispatcher.utter_message(text="{}".format(article['summary']), type= 'mrkdwn', buttons=responseSelections)
+            
             logUserAction(uid, self.name(), article['id'])
 
         else:
             dispatcher.utter_message(text="Mhm.... I don't have a summary for this article.")
             dispatcher.utter_message(template="utter_introduction")
 
-        return []
+        return [SlotSet("articles_read_count", articlesRead)]

@@ -21,6 +21,8 @@ slots:
     type: list
   article_index:
     type: float
+  articles_read_count:
+    type: float
 
 responses:
   utter_greet:
