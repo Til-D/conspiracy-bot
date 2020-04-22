@@ -2,22 +2,27 @@
 	<header><title>Conspiracy Bot</title></header>
 	<body>
 
-			<h1>Conspiracy Bot</h1>
+			<!-- CUSTOM WEBSITE -->
 
+			<h1>Conspiracy Bot</h1>
+			<p>Example integration of Infobot.<p>
+
+			<!-- BOT INTEGRATION -->
 			<div id="webchat"/>
 			<script src="https://storage.googleapis.com/mrbot-cdn/webchat-latest.js"></script>
 			// Or you can replace latest with a specific version
 			<script>
 			  WebChat.default.init({
 			    selector: "#webchat",
-			    initPayload: "/get_started",
-			    customData: {"language": "en"}, // arbitrary custom data. Stay minimal as this will be added to the socket
-			    socketUrl: "http://34.87.238.171/",
-			    socketPath: "/socket.io/",
-			    title: "Conspiracy Bot",
-			    subtitle: "All your base",
+				initPayload: "/greet",
+				customData: {"language": "en"},
+				socketUrl: "http://34.87.238.171/", //socketUrl: "http://localhost:5005",
+				socketPath: "/socket.io/",
+				title: "Infobot",
+				subtitle: "News summarized for you.",
 			  })
 			</script>
+			<!-- /END BOT INTEGRATION -->
 
 	</body>
 </html>
