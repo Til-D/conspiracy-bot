@@ -13,23 +13,25 @@ intents:
 actions:
   - action_random_article
   - action_get_summary
+  - action_show_all_articles
+  - action_instructions
 
 slots:
-  uid:
-    type: text
   article_sequence:
+    type: list
+  articles_read:
     type: list
   article_index:
     type: float
-  articles_read_count:
-    type: float
+  article_id:
+    type: text
 
 responses:
   utter_greet:
   - text: "Hello, I am Infobot, your daily news assistant. I collect news from various sources and summarise them for you."
 
   utter_introduction:
-  - text: "I have various news items for you today. You can either click on the headlines or ask me for a quick summary of the article."
+  - text: "I have various news items for you today. You can click on the headlines and I will provide you with a brief summary of the article."
     buttons:
       - title: "Got it! Let's go!"
         # payload: "Let's go!"
@@ -43,13 +45,15 @@ responses:
   utter_want_summary:
   - text: "Would you like a summary?"
 
-  utter_article_selection:
-    - custom:
-        carousel:
-          maxWidth: 6    
-          maxHeight: 7   
-          elements:
-            - title: "Article 1"
+  # utter_article_selection:
+  #   - text: "Here are some articles for you:"
+  #   - custom:
+  #       payload: carousel
+          # maxWidth: 6    
+          # maxHeight: 7   
+          # elements:
+          # data:
+          #   title: "Article 1"
               # imageButton:
               #   imageUrl: https://expertflow.com/any-image1.jpg
               #   actionType: postback
@@ -72,7 +76,7 @@ responses:
               #     payload: /button2
               #     type: postback
               #     buttonHeight: 1
-            - title: "Article 2"
+            # - title: "Article 2"
               # imageButton:
               #   imageUrl: https://expertflow.com/any-image2.jpg
               #   actionType: web_url

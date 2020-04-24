@@ -14,6 +14,7 @@
 - goodbye
 - see you around
 - see you later
+- Thank you
 
 ## intent:affirm
 - yes
@@ -58,7 +59,6 @@
 - not very good
 - extremely sad
 - so sad
-- I'm ok.
 - I'm ok
 
 ## intent:article_summary
@@ -80,6 +80,8 @@
 - another random article
 
 ## intent:show_articles
+- article overview
 - show me all articles
 - which articles do you have?
 - can I see them all?
+- Let's go!
