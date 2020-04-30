@@ -25,6 +25,8 @@ slots:
     type: float
   article_id:
     type: text
+  uuid:
+    type: text
 
 responses:
   utter_greet:

@@ -1,3 +1,4 @@
+const BOT_SERVER = "http://localhost:5005/" //http://34.87.238.171/"; //http://localhost:5005/
 
 //Bot pop-up intro
 document.addEventListener('DOMContentLoaded', function() {
@@ -72,7 +73,7 @@ function action_trigger() {
 
     // send an event to the bot, so that bot can start the conversation by greeting the user
     $.ajax({
-        url: `http://localhost:5005/conversations/${user_id}/execute`,
+        url: BOT_SERVER + `conversations/${user_id}/execute`,
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify({ "name": action_name, "policy": "MappingPolicy", "confidence": "0.98" }),
@@ -173,7 +174,7 @@ function send(message) {
     console.log("+send: " + message);
 
     $.ajax({
-        url: "http://localhost:5005/webhooks/rest/webhook",
+        url: BOT_SERVER + "webhooks/rest/webhook",
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify({ message: message, sender: user_id }),
