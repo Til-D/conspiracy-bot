@@ -1,4 +1,5 @@
-const BOT_SERVER = "http://localhost:5005/" //http://34.87.238.171/"; //http://localhost:5005/
+const BOT_SERVER = 'http://localhost:5005/'; //"http://34.87.238.171/"; 
+var resp;
 
 //Bot pop-up intro
 document.addEventListener('DOMContentLoaded', function() {
@@ -166,6 +167,18 @@ function scrollToBottomOfResults() {
 
     var terminalResultsDiv = document.getElementById("chats");
     terminalResultsDiv.scrollTop = terminalResultsDiv.scrollHeight;
+
+    // console.log('+ scrollToBottomOfResults: ' + terminalResultsDiv.scrollHeight);
+}
+
+//=========== Scroll to the the next speech bubble after new message has been added to chat ======
+function scrollToSpeechBubble(scrollElementId) {
+    // console.log('+ scrollToSpeechBubble: ' + scrollElementId);
+    var terminalResultsDiv = $('#chats');
+    var speechBubbleDiv = $('#'+scrollElementId);
+    var height = terminalResultsDiv.scrollTop() + speechBubbleDiv.position().top - speechBubbleDiv.outerHeight();//speechBubbleDiv.outerHeight();//speechBubbleDiv.offset().bottom - speechBubbleDiv.offset().top;
+    
+    terminalResultsDiv.scrollTop(height);
 }
 
 //============== send the user message to rasa server =============================================
@@ -214,6 +227,7 @@ function setBotResponse(response) {
 
     //display bot response after 500 milliseconds
     setTimeout(function() {
+        
         hideBotTyping();
         if (response.length < 1) {
             //if there is no response from Rasa, send  fallback message to the user
@@ -226,6 +240,22 @@ function setBotResponse(response) {
         } else {
 
             //if we get response from Rasa
+
+            // check if we should scroll
+            var scrollToBottom = true;
+            var scrollElementId = '';
+            resp = response;
+
+            for (i = 0; i < response.length; i++) {
+
+                //check for scrollToBottom directive
+                if (response[i].hasOwnProperty("custom") && response[i].custom.hasOwnProperty("scrollToBottom")) {
+                    scrollToBottom = response[i].custom.scrollToBottom;
+                    // console.log('scrollToBottom: ' + scrollToBottom);
+                }
+            }
+
+
             for (i = 0; i < response.length; i++) {
 
                 //check if the response contains "text"
@@ -243,7 +273,7 @@ function setBotResponse(response) {
 
                 //check if the response contains "buttons" 
                 if (response[i].hasOwnProperty("buttons")) {
-                    addSuggestion(response[i].buttons);
+                    addSuggestion(response[i].buttons, scrollToBottom);
                 }
 
                 //check if the response contains "attachment" 
@@ -286,7 +316,8 @@ function setBotResponse(response) {
                     if (response[i].custom.payload == "location") {
                         $("#userInput").prop('disabled', true);
                         getLocation();
-                        scrollToBottomOfResults();
+                        if(scrollToBottom)
+                            scrollToBottomOfResults();
                         return;
                     }
 
@@ -324,9 +355,23 @@ function setBotResponse(response) {
                         //pass the data variable to createCollapsible function
                         createCollapsible(data);
                     }
+
+                    if (response[i].custom.payload == "article") {
+                        var BotResponse = '<img class="botAvatar" src="./static/img/sara_avatar.png"/><p class="botMsg" id="summary_' + response[i].custom.articleId + '">' + response[i].custom.headline + '</p><div class="clearfix"></div>';
+                        $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
+
+                        BotResponse = '<img class="botAvatar" src="./static/img/sara_avatar.png"/><p class="botMsg">' + response[i].custom.summary + '</p><div class="clearfix"></div>';
+                        $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
+                        scrollElementId = 'summary_' + response[i].custom.articleId;
+                    }   
                 }
             }
-            scrollToBottomOfResults();
+            
+            if(scrollToBottom) {
+                scrollToBottomOfResults();
+            } else {
+                scrollToSpeechBubble(scrollElementId);
+            }
         }
     }, 500);
 }
@@ -386,7 +431,7 @@ function renderDropDwon(data) {
 
 //====================================== Suggestions ===========================================
 
-function addSuggestion(textToAdd) {
+function addSuggestion(textToAdd, scrollToBottom) {
     setTimeout(function() {
         var suggestions = textToAdd;
         var suggLength = textToAdd.length;
@@ -395,7 +440,8 @@ function addSuggestion(textToAdd) {
         for (i = 0; i < suggLength; i++) {
             $('<div class="menuChips" data-payload=\'' + (suggestions[i].payload) + '\'>' + suggestions[i].title + "</div>").appendTo(".menu");
         }
-        scrollToBottomOfResults();
+        if(scrollToBottom)
+            scrollToBottomOfResults();
     }, 1000);
 }
 

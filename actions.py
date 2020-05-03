@@ -174,7 +174,8 @@ class ActionGetSummary(Action):
             if(len(articlesRead) >= MIN_ARTICLES_TO_READ):
                 # index<MIN_ARTICLES_TO_READ):
                 
-                dispatcher.utter_message(text="{}".format(article['summary']), type= 'mrkdwn')
+                # dispatcher.utter_message(text="{}".format(article['summary']), type= 'mrkdwn')
+                dispatcher.utter_message(json_message={"payload": "article", "articleId": articleId, "headline": article['headline'], "summary": "{}".format(article['summary']), "scrollToBottom": False})
                 dispatcher.utter_message(text="Once you're done reading you can return to the final part of the survey.")
                 dispatcher.utter_message(text='To get back to the survey you can simply close this window.')
                 dispatcher.utter_message(template="utter_goodbye")
@@ -182,8 +183,9 @@ class ActionGetSummary(Action):
                 responseSelections = [
                 {"title": 'Yes, please!', "payload": '/show_articles'}
                      ]
-                dispatcher.utter_message(text="{}".format(article['summary']), type= 'mrkdwn', buttons=responseSelections)
-                dispatcher.utter_message(text='Want more news?')
+                # dispatcher.utter_message(text="{}".format(article['summary']), type= 'mrkdwn', json_message={"articleId": articleId})
+                dispatcher.utter_message(json_message={"payload": "article", "articleId": articleId, "headline": article['headline'], "summary": "{}".format(article['summary']), "scrollToBottom": False})
+                dispatcher.utter_message(text='Want more news?', buttons=responseSelections)
 
             
             # dispatcher.utter_message(text="{}".format(article['headline']), type= 'mrkdwn')
