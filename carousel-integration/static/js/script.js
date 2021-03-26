@@ -1,5 +1,7 @@
-const BOT_SERVER = 'http://localhost:5005/'; //"http://34.87.238.171/"; 
-var resp;
+const BOT_SERVER =  'http://localhost:5005/';//"http://34.87.238.171/"; //
+const DEFAULT_BOT_TYPE = 'A'
+
+console.log('connecting to: ' + BOT_SERVER);
 
 //Bot pop-up intro
 document.addEventListener('DOMContentLoaded', function() {
@@ -29,14 +31,13 @@ $(document).ready(function() {
 
 
     //enable this if u have configured the bot to start the conversation. 
-    // showBotTyping();
+    showBotTyping();
     // $("#userInput").prop('disabled', true);
 
     $(".profile_div").toggle();
     $(".widget").toggle();
 
     //global variables
-    action_name = "/greet";
     card = {};
     cards_scroller = {};
 
@@ -46,6 +47,15 @@ $(document).ready(function() {
         user_id = "unknown";
     }
     console.log('user_id: ' + user_id);
+
+    if(urlParams.has('bot')) {
+        bot_type = urlParams.get('bot');
+    } else {
+        bot_type = DEFAULT_BOT_TYPE;
+    }
+    console.log('bot_type: ' + bot_type);
+
+    action_name = '/greet{"bot_type": "' + bot_type + '"}';
 
     //if you want the bot to start the conversation
     send(action_name);
@@ -74,7 +84,7 @@ function action_trigger() {
 
     // send an event to the bot, so that bot can start the conversation by greeting the user
     $.ajax({
-        url: BOT_SERVER + `conversations/${user_id}/execute`,
+        url: BOT_SERVER + `conversations/${user_id}/${bot_type}/execute`,
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify({ "name": action_name, "policy": "MappingPolicy", "confidence": "0.98" }),
@@ -190,7 +200,7 @@ function send(message) {
         url: BOT_SERVER + "webhooks/rest/webhook",
         type: "POST",
         contentType: "application/json",
-        data: JSON.stringify({ message: message, sender: user_id }),
+        data: JSON.stringify({ message: message, sender: user_id}),
         success: function(botResponse, status) {
             console.log("Response from Rasa: ", botResponse, "\nStatus: ", status);
 
@@ -244,7 +254,6 @@ function setBotResponse(response) {
             // check if we should scroll
             var scrollToBottom = true;
             var scrollElementId = '';
-            resp = response;
 
             for (i = 0; i < response.length; i++) {
 
@@ -553,7 +562,7 @@ function createCardsCarousel(cardsData) {
         title = cardsData[i].name;
         // ratings = Math.round((cardsData[i].ratings / 5) * 100) + "%";
         data = cardsData[i];
-        item = '<div class="carousel_cards in-left"><a class="article" id="' + cardsData[i].id + '"><img class="cardBackgroundImage" src="' + cardsData[i].image + '"><div class="cardFooter">' + '<span class="cardTitle" title="' + title + '">' + title + "</span> " + "</div>" + "</a>" + "</div>";
+        item = '<div class="carousel_cards in-left"><a class="article" id="' + cardsData[i].id + '"><img class="cardBackgroundImage" src="./static/img/articles/' + cardsData[i].image + '"><div class="cardFooter">' + '<span class="cardTitle" title="' + title + '">' + title + "</span> " + "</div>" + "</a>" + "</div>";
         // item = '<div class="carousel_cards in-left"><a class="article" id="' + cardsData[i].id + '"><img class="cardBackgroundImage" src="' + cardsData[i].image + '"><div class="cardFooter">' + '<span class="cardTitle" title="' + title + '">' + title + "</span> " + '<div class="cardDescription">' + '<div class="stars-outer">' + '<div class="stars-inner" style="width:' + ratings + '" ></div>' + "</div>" + "</div>" + "</div>" + "</a>" + "</div>";
         // console.log(item);
         cards += item;
@@ -621,6 +630,7 @@ $(document).on("click", ".quickReplies .chip", function() {
 // carousel article clicks
 $(document).on("click", ".article", function() {
     var articleId = this.id;
+    showBotTyping();
     // var text = this.innerText;
     // var payload = 'action_get_summary{"article_id": "' + articleId + '"}';
     // console.log("payload: ", payload)

@@ -1,3 +1,5 @@
+version: "2.0"
+
 intents:
   - greet
   - goodbye
@@ -15,18 +17,27 @@ actions:
   - action_get_summary
   - action_show_all_articles
   - action_instructions
+  - action_get_survey_code
 
 slots:
   article_sequence:
     type: list
+    influence_conversation: false
   articles_read:
     type: list
+    influence_conversation: false
   article_index:
     type: float
+    influence_conversation: false
   article_id:
     type: text
+    influence_conversation: false
   uuid:
     type: text
+    influence_conversation: false
+  bot_type:
+    type: text
+    influence_conversation: false
 
 responses:
   utter_greet:
@@ -37,7 +48,7 @@ responses:
     buttons:
       - title: "Got it! Let's go!"
         # payload: "Let's go!"
-        payload: "/affirm"
+        payload: "/show_articles"
 
   utter_goodbye:
   - text: "Bye"
