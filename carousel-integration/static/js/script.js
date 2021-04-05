@@ -197,7 +197,7 @@ function send(message) {
     console.log("+send: " + message);
 
     $.ajax({
-        url: BOT_SERVER + "webhooks/rest/webhook",
+        url: BOT_SERVER + "/webhooks/rest/webhook", //"webhooks/rest/webhook"
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify({ message: message, sender: user_id}),
